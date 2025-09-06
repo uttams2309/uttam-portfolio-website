@@ -2,21 +2,36 @@ package com.utsingh.portfolio.controller;
 
 import com.utsingh.portfolio.model.Portfolio;
 import com.utsingh.portfolio.service.PortfolioService;
+import com.utsingh.portfolio.service.HerokuPortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/portfolio")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "https://uttam-portfolio-2024.netlify.app"})
 public class PortfolioController {
     
-    @Autowired
+    @Autowired(required = false)
     private PortfolioService portfolioService;
+    
+    @Autowired(required = false)
+    private HerokuPortfolioService herokuPortfolioService;
+    
+    @Autowired
+    private Environment environment;
+    
+    private boolean isHerokuProfile() {
+        return Arrays.asList(environment.getActiveProfiles()).contains("heroku");
+    }
     
     /**
      * Get all portfolios
@@ -24,7 +39,9 @@ public class PortfolioController {
     @GetMapping
     public ResponseEntity<List<Portfolio>> getAllPortfolios() {
         try {
-            List<Portfolio> portfolios = portfolioService.getAllPortfolios();
+            List<Portfolio> portfolios = isHerokuProfile() ? 
+                herokuPortfolioService.getAllPortfolios() : 
+                portfolioService.getAllPortfolios();
             return ResponseEntity.ok(portfolios);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -37,7 +54,9 @@ public class PortfolioController {
     @GetMapping("/{id}")
     public ResponseEntity<Portfolio> getPortfolioById(@PathVariable String id) {
         try {
-            Optional<Portfolio> portfolio = portfolioService.getPortfolioById(id);
+            Optional<Portfolio> portfolio = isHerokuProfile() ? 
+                herokuPortfolioService.getPortfolioById(id) : 
+                portfolioService.getPortfolioById(id);
             return portfolio.map(ResponseEntity::ok)
                           .orElse(ResponseEntity.notFound().build());
         } catch (Exception e) {
@@ -51,7 +70,9 @@ public class PortfolioController {
     @GetMapping("/name/{name}")
     public ResponseEntity<Portfolio> getPortfolioByName(@PathVariable String name) {
         try {
-            Optional<Portfolio> portfolio = portfolioService.getPortfolioByName(name);
+            Optional<Portfolio> portfolio = isHerokuProfile() ? 
+                herokuPortfolioService.getPortfolioByName(name) : 
+                portfolioService.getPortfolioByName(name);
             return portfolio.map(ResponseEntity::ok)
                           .orElse(ResponseEntity.notFound().build());
         } catch (Exception e) {
@@ -65,7 +86,9 @@ public class PortfolioController {
     @PostMapping
     public ResponseEntity<Portfolio> createPortfolio(@RequestBody Portfolio portfolio) {
         try {
-            Portfolio createdPortfolio = portfolioService.createPortfolio(portfolio);
+            Portfolio createdPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.createPortfolio(portfolio) : 
+                portfolioService.createPortfolio(portfolio);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPortfolio);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -78,7 +101,9 @@ public class PortfolioController {
     @PutMapping("/{id}")
     public ResponseEntity<Portfolio> updatePortfolio(@PathVariable String id, @RequestBody Portfolio portfolio) {
         try {
-            Portfolio updatedPortfolio = portfolioService.updatePortfolio(id, portfolio);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.updatePortfolio(id, portfolio) : 
+                portfolioService.updatePortfolio(id, portfolio);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -91,7 +116,9 @@ public class PortfolioController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePortfolio(@PathVariable String id) {
         try {
-            boolean deleted = portfolioService.deletePortfolio(id);
+            boolean deleted = isHerokuProfile() ? 
+                herokuPortfolioService.deletePortfolio(id) : 
+                portfolioService.deletePortfolio(id);
             return deleted ? ResponseEntity.noContent().build() 
                           : ResponseEntity.notFound().build();
         } catch (Exception e) {
@@ -108,7 +135,9 @@ public class PortfolioController {
     public ResponseEntity<Portfolio> addProject(@PathVariable String portfolioId, 
                                                @RequestBody Portfolio.Project project) {
         try {
-            Portfolio updatedPortfolio = portfolioService.addProject(portfolioId, project);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.addProject(portfolioId, project) : 
+                portfolioService.addProject(portfolioId, project);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -125,7 +154,9 @@ public class PortfolioController {
                                                   @PathVariable String projectId,
                                                   @RequestBody Portfolio.Project project) {
         try {
-            Portfolio updatedPortfolio = portfolioService.updateProject(portfolioId, projectId, project);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.updateProject(portfolioId, projectId, project) : 
+                portfolioService.updateProject(portfolioId, projectId, project);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -141,7 +172,9 @@ public class PortfolioController {
     public ResponseEntity<Portfolio> deleteProject(@PathVariable String portfolioId,
                                                   @PathVariable String projectId) {
         try {
-            Portfolio updatedPortfolio = portfolioService.deleteProject(portfolioId, projectId);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.deleteProject(portfolioId, projectId) : 
+                portfolioService.deleteProject(portfolioId, projectId);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -159,7 +192,9 @@ public class PortfolioController {
     public ResponseEntity<Portfolio> addSkill(@PathVariable String portfolioId,
                                              @RequestBody Portfolio.Skill skill) {
         try {
-            Portfolio updatedPortfolio = portfolioService.addSkill(portfolioId, skill);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.addSkill(portfolioId, skill) : 
+                portfolioService.addSkill(portfolioId, skill);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -177,7 +212,9 @@ public class PortfolioController {
     public ResponseEntity<Portfolio> addAchievement(@PathVariable String portfolioId,
                                                    @RequestBody Portfolio.Achievement achievement) {
         try {
-            Portfolio updatedPortfolio = portfolioService.addAchievement(portfolioId, achievement);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.addAchievement(portfolioId, achievement) : 
+                portfolioService.addAchievement(portfolioId, achievement);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -195,7 +232,9 @@ public class PortfolioController {
     public ResponseEntity<Portfolio> addExperience(@PathVariable String portfolioId,
                                                   @RequestBody Portfolio.Experience experience) {
         try {
-            Portfolio updatedPortfolio = portfolioService.addExperience(portfolioId, experience);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.addExperience(portfolioId, experience) : 
+                portfolioService.addExperience(portfolioId, experience);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -213,7 +252,9 @@ public class PortfolioController {
     public ResponseEntity<Portfolio> addEducation(@PathVariable String portfolioId,
                                                  @RequestBody Portfolio.Education education) {
         try {
-            Portfolio updatedPortfolio = portfolioService.addEducation(portfolioId, education);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.addEducation(portfolioId, education) : 
+                portfolioService.addEducation(portfolioId, education);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -231,7 +272,9 @@ public class PortfolioController {
     public ResponseEntity<Portfolio> addTravel(@PathVariable String portfolioId,
                                               @RequestBody Portfolio.Travel travel) {
         try {
-            Portfolio updatedPortfolio = portfolioService.addTravel(portfolioId, travel);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.addTravel(portfolioId, travel) : 
+                portfolioService.addTravel(portfolioId, travel);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -249,7 +292,9 @@ public class PortfolioController {
     public ResponseEntity<Portfolio> addHackathon(@PathVariable String portfolioId,
                                                  @RequestBody Portfolio.Hackathon hackathon) {
         try {
-            Portfolio updatedPortfolio = portfolioService.addHackathon(portfolioId, hackathon);
+            Portfolio updatedPortfolio = isHerokuProfile() ? 
+                herokuPortfolioService.addHackathon(portfolioId, hackathon) : 
+                portfolioService.addHackathon(portfolioId, hackathon);
             return ResponseEntity.ok(updatedPortfolio);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
@@ -264,7 +309,9 @@ public class PortfolioController {
     @GetMapping("/exists/{email}")
     public ResponseEntity<Boolean> existsByEmail(@PathVariable String email) {
         try {
-            boolean exists = portfolioService.existsByEmail(email);
+            boolean exists = isHerokuProfile() ? 
+                herokuPortfolioService.existsByEmail(email) : 
+                portfolioService.existsByEmail(email);
             return ResponseEntity.ok(exists);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
