@@ -3,6 +3,7 @@ package com.utsingh.portfolio.service;
 import com.utsingh.portfolio.model.Portfolio;
 import com.utsingh.portfolio.repository.PortfolioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Profile("!heroku")
 public class PortfolioService {
     
     @Autowired
