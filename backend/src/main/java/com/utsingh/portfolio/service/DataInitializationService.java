@@ -4,6 +4,7 @@ import com.utsingh.portfolio.model.Portfolio;
 import com.utsingh.portfolio.repository.PortfolioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Profile("!heroku")
 public class DataInitializationService implements CommandLineRunner {
     
     @Autowired
