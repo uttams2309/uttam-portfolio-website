@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/portfolio")
+@RequestMapping("/portfolio")
 @CrossOrigin(origins = {"*"})
 @Tag(name = "Portfolio", description = "Portfolio management API for managing personal portfolio data including projects, skills, achievements, and experiences")
 public class PortfolioController {

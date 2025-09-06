@@ -20,7 +20,7 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI portfolioOpenAPI() {
         Server prodServer = new Server();
-        prodServer.setUrl("https://portfolio-backend-uttam-60b57a60be26.herokuapp.com");
+        prodServer.setUrl("https://portfolio-backend-uttam-60b57a60be26.herokuapp.com/api");
         prodServer.setDescription("Production Server");
 
         Server localServer = new Server();
