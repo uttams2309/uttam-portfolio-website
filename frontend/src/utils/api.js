@@ -4,7 +4,7 @@ import axios from 'axios';
 // Base URL for our Spring Boot API
 const API_BASE_URL = import.meta.env.MODE === 'development' 
   ? 'http://localhost:8080/api' 
-  : 'https://portfolio-backend-uttam.herokuapp.com/api';
+  : 'https://portfolio-backend-uttam-60b57a60be26.herokuapp.com/api';
 
 // Create axios instance with default config
 const apiClient = axios.create({
