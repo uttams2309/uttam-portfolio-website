@@ -3,6 +3,13 @@ package com.utsingh.portfolio.controller;
 import com.utsingh.portfolio.model.Portfolio;
 import com.utsingh.portfolio.service.PortfolioService;
 import com.utsingh.portfolio.service.HerokuPortfolioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
@@ -18,6 +25,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/portfolio")
 @CrossOrigin(origins = {"*"})
+@Tag(name = "Portfolio", description = "Portfolio management API for managing personal portfolio data including projects, skills, achievements, and experiences")
 public class PortfolioController {
     
     @Autowired(required = false)
@@ -33,9 +41,16 @@ public class PortfolioController {
         return Arrays.asList(environment.getActiveProfiles()).contains("heroku");
     }
     
-    /**
-     * Get all portfolios
-     */
+    @Operation(
+        summary = "Get all portfolios",
+        description = "Retrieve a list of all portfolio records from the database"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved portfolios",
+                    content = @Content(mediaType = "application/json", 
+                                     schema = @Schema(implementation = Portfolio.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping
     public ResponseEntity<List<Portfolio>> getAllPortfolios() {
         try {
@@ -48,11 +63,20 @@ public class PortfolioController {
         }
     }
     
-    /**
-     * Get portfolio by ID
-     */
+    @Operation(
+        summary = "Get portfolio by ID",
+        description = "Retrieve a specific portfolio by its unique identifier"
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Portfolio found",
+                    content = @Content(mediaType = "application/json", 
+                                     schema = @Schema(implementation = Portfolio.class))),
+        @ApiResponse(responseCode = "404", description = "Portfolio not found"),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/{id}")
-    public ResponseEntity<Portfolio> getPortfolioById(@PathVariable String id) {
+    public ResponseEntity<Portfolio> getPortfolioById(
+            @Parameter(description = "Portfolio ID", required = true) @PathVariable String id) {
         try {
             Optional<Portfolio> portfolio = isHerokuProfile() ? 
                 herokuPortfolioService.getPortfolioById(id) : 
