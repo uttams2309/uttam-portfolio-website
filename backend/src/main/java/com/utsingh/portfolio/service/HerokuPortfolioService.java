@@ -143,13 +143,16 @@ public class HerokuPortfolioService {
         // Personal Info
         Portfolio.PersonalInfo personalInfo = new Portfolio.PersonalInfo();
         personalInfo.setName("Uttam Singh");
+        personalInfo.setTitle("Full Stack Developer");
         personalInfo.setEmail("uttams2309@gmail.com");
         personalInfo.setPhone("+91-9876543210");
         personalInfo.setLocation("India");
         personalInfo.setBio("Full Stack Developer with expertise in Java, React, and cloud technologies");
-        personalInfo.setLinkedin("https://linkedin.com/in/uttam-singh");
-        personalInfo.setGithub("https://github.com/uttam-singh");
-        personalInfo.setWebsite("https://uttam-portfolio-2024.netlify.app");
+        personalInfo.setSocialLinks(Arrays.asList(
+            "https://linkedin.com/in/uttam-singh",
+            "https://github.com/uttam-singh",
+            "https://uttam-portfolio-2024.netlify.app"
+        ));
         portfolio.setPersonalInfo(personalInfo);
         
         // Skills
@@ -157,22 +160,22 @@ public class HerokuPortfolioService {
         skill1.setId("skill-1");
         skill1.setName("Java");
         skill1.setCategory("Programming Languages");
-        skill1.setProficiency("Advanced");
-        skill1.setYearsOfExperience(3);
+        skill1.setProficiency(90);
+        skill1.setDescription("Advanced proficiency in Java development");
         
         Portfolio.Skill skill2 = new Portfolio.Skill();
         skill2.setId("skill-2");
         skill2.setName("React");
         skill2.setCategory("Frontend");
-        skill2.setProficiency("Advanced");
-        skill2.setYearsOfExperience(2);
+        skill2.setProficiency(85);
+        skill2.setDescription("Advanced proficiency in React development");
         
         Portfolio.Skill skill3 = new Portfolio.Skill();
         skill3.setId("skill-3");
         skill3.setName("Spring Boot");
         skill3.setCategory("Backend");
-        skill3.setProficiency("Advanced");
-        skill3.setYearsOfExperience(2);
+        skill3.setProficiency(88);
+        skill3.setDescription("Advanced proficiency in Spring Boot development");
         
         portfolio.setSkills(Arrays.asList(skill1, skill2, skill3));
         
@@ -217,7 +220,7 @@ public class HerokuPortfolioService {
         education1.setId("edu-1");
         education1.setInstitution("Indian Institute of Technology");
         education1.setDegree("Bachelor of Technology");
-        education1.setFieldOfStudy("Computer Science");
+        education1.setField("Computer Science");
         education1.setStartDate("2018-08-01");
         education1.setEndDate("2022-05-01");
         education1.setGrade("8.5 CGPA");
@@ -230,7 +233,7 @@ public class HerokuPortfolioService {
         achievement1.setTitle("Best Developer Award");
         achievement1.setDescription("Awarded for outstanding performance in software development");
         achievement1.setDate("2023-12-01");
-        achievement1.setIssuer("Tech Solutions Inc.");
+        achievement1.setOrganization("Tech Solutions Inc.");
         
         portfolio.setAchievements(Arrays.asList(achievement1));
         
@@ -249,10 +252,12 @@ public class HerokuPortfolioService {
         hackathon1.setId("hack-1");
         hackathon1.setName("TechCrunch Disrupt");
         hackathon1.setDate("2023-09-15");
-        hackathon1.setPosition("2nd Place");
+        hackathon1.setResult("2nd Place");
         hackathon1.setDescription("Built an AI-powered chatbot for customer service");
-        hackathon1.setTeamSize(4);
+        hackathon1.setProjectTitle("AI Customer Service Bot");
+        hackathon1.setProjectDescription("An intelligent chatbot for automated customer support");
         hackathon1.setTechnologies(Arrays.asList("Python", "TensorFlow", "React", "Node.js"));
+        hackathon1.setTeamMembers(Arrays.asList("Uttam Singh", "Team Member 2", "Team Member 3", "Team Member 4"));
         
         portfolio.setHackathons(Arrays.asList(hackathon1));
         
