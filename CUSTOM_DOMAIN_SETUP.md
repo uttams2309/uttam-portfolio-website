@@ -27,33 +27,61 @@ This guide will help you configure the custom domain `uttamsingh.social` for you
 
 ## Step 2: Configure DNS Records
 
+You need to add DNS records to your domain registrar (where you bought uttamsingh.social) to point your domain to Netlify's servers.
+
 ### Option A: Using A Records (Recommended)
-Add these A records to your domain's DNS settings:
+
+**What are A Records?** A records point your domain directly to IP addresses where your website is hosted.
+
+Add **FOUR separate A records** to your domain's DNS settings. Each record should have:
+
+**Record 1:**
+- Type: `A`
+- Name: `@` (this represents your root domain uttamsingh.social)
+- Value/Points to: `75.2.60.5`
+- TTL: `3600` (or leave default)
+
+**Record 2:**
+- Type: `A`
+- Name: `@` (same as above)
+- Value/Points to: `99.83.190.102`
+- TTL: `3600` (or leave default)
+
+**Record 3:**
+- Type: `A`
+- Name: `@` (same as above)
+- Value/Points to: `198.61.251.14`
+- TTL: `3600` (or leave default)
+
+**Record 4:**
+- Type: `A`
+- Name: `@` (same as above)
+- Value/Points to: `198.61.251.15`
+- TTL: `3600` (or leave default)
+
+### For www subdomain (www.uttamsingh.social):
+
+**What is a CNAME Record?** A CNAME record creates an alias that points one domain to another.
+
+Add **ONE CNAME record**:
+- Type: `CNAME`
+- Name: `www` (this creates www.uttamsingh.social)
+- Value/Points to: `uttamsingh.social` (points www to your main domain)
+- TTL: `3600` (or leave default)
+
+### Visual Example of What You're Adding:
 
 ```
-Type: A
-Name: @ (or root/apex)
-Value: 75.2.60.5
+DNS Records for uttamsingh.social:
 
-Type: A  
-Name: @ (or root/apex)
-Value: 99.83.190.102
-
-Type: A
-Name: @ (or root/apex) 
-Value: 198.61.251.14
-
-Type: A
-Name: @ (or root/apex)
-Value: 198.61.251.15
+A     @     75.2.60.5        (uttamsingh.social → Netlify Server 1)
+A     @     99.83.190.102    (uttamsingh.social → Netlify Server 2)  
+A     @     198.61.251.14    (uttamsingh.social → Netlify Server 3)
+A     @     198.61.251.15    (uttamsingh.social → Netlify Server 4)
+CNAME www   uttamsingh.social (www.uttamsingh.social → uttamsingh.social)
 ```
 
-### For www subdomain:
-```
-Type: CNAME
-Name: www
-Value: uttamsingh.social
-```
+**Why 4 A records?** Netlify uses multiple IP addresses for redundancy and load balancing. If one server goes down, the others will still serve your website.
 
 ### Option B: Using CNAME (Alternative)
 If your DNS provider supports CNAME for apex domains:
@@ -108,19 +136,55 @@ Value: [your-netlify-subdomain].netlify.app
 ## Common DNS Providers Configuration
 
 ### Cloudflare
-1. Go to DNS tab in Cloudflare dashboard
-2. Add A records as specified above
-3. Ensure proxy status is "Proxied" (orange cloud)
+1. **Login to Cloudflare Dashboard**
+2. **Select your domain** `uttamsingh.social`
+3. **Go to DNS tab** (in the top menu)
+4. **Add A Records** - Click "Add record" button 4 times:
+   - Type: `A`, Name: `@`, IPv4 address: `75.2.60.5`, Proxy status: `Proxied` (orange cloud)
+   - Type: `A`, Name: `@`, IPv4 address: `99.83.190.102`, Proxy status: `Proxied`
+   - Type: `A`, Name: `@`, IPv4 address: `198.61.251.14`, Proxy status: `Proxied`
+   - Type: `A`, Name: `@`, IPv4 address: `198.61.251.15`, Proxy status: `Proxied`
+5. **Add CNAME Record** - Click "Add record":
+   - Type: `CNAME`, Name: `www`, Target: `uttamsingh.social`, Proxy status: `Proxied`
 
 ### GoDaddy
-1. Go to DNS Management
-2. Add A records in the "Records" section
-3. Use "@" for the host name (apex domain)
+1. **Login to GoDaddy Account**
+2. **Go to My Products** → **Domains** → **Manage** (next to uttamsingh.social)
+3. **Click "DNS" tab** or "Manage DNS"
+4. **Add A Records** - Click "Add" button 4 times:
+   - Type: `A`, Host: `@`, Points to: `75.2.60.5`, TTL: `1 Hour`
+   - Type: `A`, Host: `@`, Points to: `99.83.190.102`, TTL: `1 Hour`
+   - Type: `A`, Host: `@`, Points to: `198.61.251.14`, TTL: `1 Hour`
+   - Type: `A`, Host: `@`, Points to: `198.61.251.15`, TTL: `1 Hour`
+5. **Add CNAME Record** - Click "Add":
+   - Type: `CNAME`, Host: `www`, Points to: `uttamsingh.social`, TTL: `1 Hour`
 
 ### Namecheap
-1. Go to Advanced DNS tab
-2. Add A records with Host "@"
-3. Add CNAME record with Host "www"
+1. **Login to Namecheap Account**
+2. **Go to Domain List** → **Manage** (next to uttamsingh.social)
+3. **Click "Advanced DNS" tab**
+4. **Add A Records** - Click "Add New Record" 4 times:
+   - Type: `A Record`, Host: `@`, Value: `75.2.60.5`, TTL: `Automatic`
+   - Type: `A Record`, Host: `@`, Value: `99.83.190.102`, TTL: `Automatic`
+   - Type: `A Record`, Host: `@`, Value: `198.61.251.14`, TTL: `Automatic`
+   - Type: `A Record`, Host: `@`, Value: `198.61.251.15`, TTL: `Automatic`
+5. **Add CNAME Record** - Click "Add New Record":
+   - Type: `CNAME Record`, Host: `www`, Value: `uttamsingh.social`, TTL: `Automatic`
+
+### Other DNS Providers (General Steps)
+1. **Login to your domain registrar** (where you bought uttamsingh.social)
+2. **Find DNS Management section** (might be called "DNS Settings", "Name Servers", "DNS Records")
+3. **Look for existing records** - You might see some default A records or CNAME records
+4. **Delete conflicting records** - Remove any existing A records for `@` or CNAME records for `www` that point elsewhere
+5. **Add the 5 new records** as specified above (4 A records + 1 CNAME record)
+6. **Save changes** - Look for "Save", "Apply", or "Update" button
+
+### Important Notes:
+- **Delete existing conflicting records** before adding new ones
+- **Use `@` symbol** for the root domain (uttamsingh.social)
+- **Use `www`** for the subdomain (www.uttamsingh.social)
+- **TTL can be left as default** (usually 3600 seconds or 1 hour)
+- **Changes take time** - DNS propagation can take 1-48 hours
 
 ## Troubleshooting
 
