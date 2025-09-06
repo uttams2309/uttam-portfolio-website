@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/portfolio")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000", "https://uttam-portfolio-2024.netlify.app"})
+@RequestMapping("/api/portfolio")
+@CrossOrigin(origins = {"*"})
 public class PortfolioController {
     
     @Autowired(required = false)
