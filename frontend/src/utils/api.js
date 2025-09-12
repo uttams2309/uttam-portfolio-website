@@ -60,7 +60,7 @@ const transformPortfolioData = (portfolioData) => {
       linkedinUrl: personalInfo?.socialLinks?.[1] || "",
       githubUrl: personalInfo?.socialLinks?.[0] || "",
       profileImage: personalInfo?.profileImage || "https://via.placeholder.com/150",
-      bio: personalInfo?.bio || "",
+      summary: personalInfo?.bio || "",
       education: education?.map(edu => ({
         degree: edu.degree,
         institution: edu.institution,
