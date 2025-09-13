@@ -21,7 +21,7 @@ const Home = ({ userData }) => {
     { title: 'Development', path: '/development', icon: '💻' },
     { title: 'Machine Learning/AI', path: '/machine-learning', icon: '🤖' },
     { title: 'Travelling', path: '/travelling', icon: '✈️' },
-    { title: 'Achievements', path: '/achievements', icon: '🏆' },
+    // { title: 'Achievements', path: '/achievements', icon: '🏆' },
     { title: 'Hackathons', path: '/hackathons', icon: '⚡' },
     { title: 'Data Engineering', path: '/data-engineering', icon: '📊' },
     { title: 'Computer Science', path: '/computer-science', icon: '🔍' },
