@@ -1,5 +1,6 @@
 // src/utils/api.js
 import axios from 'axios';
+import defaultProfileImage from '../../public/assets/images/propic.jpeg'
 
 // Base URL for our Spring Boot API
 const API_BASE_URL = import.meta.env.MODE === 'development' 
@@ -59,7 +60,7 @@ const transformPortfolioData = (portfolioData) => {
       location: personalInfo?.location || "",
       linkedinUrl: personalInfo?.socialLinks?.[1] || "",
       githubUrl: personalInfo?.socialLinks?.[0] || "",
-      profileImage: personalInfo?.profileImage || "https://via.placeholder.com/150",
+      profileImage: defaultProfileImage,
       summary: personalInfo?.bio || "",
       education: education?.map(edu => ({
         degree: edu.degree,

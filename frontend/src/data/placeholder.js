@@ -3,7 +3,7 @@ import {
   FaCode, FaServer, FaLaptopCode, FaRobot, 
   FaDatabase, FaBrain, FaChartLine
 } from 'react-icons/fa';
-
+import image from '../../public/assets/images/propic.jpeg';
 // Placeholder data for when MongoDB is not connected
 export const placeholderData = {
   about: {
@@ -13,7 +13,7 @@ export const placeholderData = {
     location: "New York, USA",
     linkedinUrl: "https://linkedin.com/in/johndoe",
     githubUrl: "https://github.com/johndoe",
-    profileImage: "https://via.placeholder.com/150",
+    profileImage: image,
     bio: "Hi, I'm John! I'm a passionate full stack developer and data scientist with over 5 years of experience building web applications and working with machine learning models.\n\nI love solving complex problems and creating elegant solutions. My background in both software engineering and data science allows me to bridge the gap between these two domains and build data-driven applications that deliver real value.",
     education: [
       {
